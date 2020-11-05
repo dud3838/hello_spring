@@ -1,11 +1,19 @@
 package hello.hellospring.repository;
 
 import hello.hellospring.domain.Member;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 public class MemoryMemberRepositoryTest {
-    MemberRepository repository = new MemoryMemberRepository();
+    MemoryMemberRepository repository = new MemoryMemberRepository();
+
+    @AfterEach
+    public void afterEach() {
+        repository.clearStore();
+    }
 
     @Test
     public void save() {
@@ -31,4 +39,19 @@ public class MemoryMemberRepositoryTest {
         Member result = repository.findByName("spring1").get();
         Assertions.assertEquals(member, result);
     }
+
+    @Test
+    public void findAll(){
+        Member member = new Member();
+        member.setName("spring1");
+        repository.save(member);
+
+        Member member2 = new Member();
+        member2.setName("spring2");
+        repository.save(member2);
+
+        List<Member> result = repository.findAll();
+        Assertions.assertEquals(result.size(), 2);
+    }
 }
+
